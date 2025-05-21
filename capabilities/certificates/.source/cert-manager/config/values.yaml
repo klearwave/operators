@@ -1,6 +1,6 @@
 ---
 component: cert-manager
-defaultNamespace: kw-certificates-system
+defaultNamespace: klearwave-certificates-system
 projectVersion: v1.17.2
 injector:
   replicas: 2
@@ -26,4 +26,3 @@ webhook:
       memory: "32Mi"
     limits:
       memory: "64Mi"
-

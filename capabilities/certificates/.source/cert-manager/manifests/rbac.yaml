@@ -3,7 +3,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   name: cert-manager-cainjector
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cainjector
     app.kubernetes.io/name: cainjector
@@ -13,7 +13,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 ---
@@ -24,7 +24,7 @@ metadata:
   name: cert-manager
   # +operator-builder:field:name=aws.roleARN,arbitrary,default="",type=string,description=`
   # The AWS IAM Role ARN to use for validating public DNS records for issuing public certificates.` 
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cert-manager
     app.kubernetes.io/name: cert-manager
@@ -34,7 +34,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 ---
@@ -43,7 +43,7 @@ kind: ServiceAccount
 automountServiceAccountToken: true
 metadata:
   name: cert-manager-webhook
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: webhook
     app.kubernetes.io/name: webhook
@@ -53,7 +53,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 ---
@@ -70,7 +70,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -144,7 +144,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -196,7 +196,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -248,7 +248,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -323,7 +323,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -395,7 +395,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -506,7 +506,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -582,7 +582,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -612,7 +612,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -651,7 +651,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -698,7 +698,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -725,7 +725,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -774,7 +774,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -798,7 +798,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -807,7 +807,7 @@ roleRef:
   name: cert-manager-cainjector
 subjects:
   - name: cert-manager-cainjector
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -823,7 +823,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -832,7 +832,7 @@ roleRef:
   name: cert-manager-controller-issuers
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -848,7 +848,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -857,7 +857,7 @@ roleRef:
   name: cert-manager-controller-clusterissuers
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -873,7 +873,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -882,7 +882,7 @@ roleRef:
   name: cert-manager-controller-certificates
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -898,7 +898,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -907,7 +907,7 @@ roleRef:
   name: cert-manager-controller-orders
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -923,7 +923,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -932,7 +932,7 @@ roleRef:
   name: cert-manager-controller-challenges
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -948,7 +948,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -957,7 +957,7 @@ roleRef:
   name: cert-manager-controller-ingress-shim
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -973,7 +973,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -982,7 +982,7 @@ roleRef:
   name: cert-manager-controller-approve:cert-manager-io
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -998,7 +998,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1007,7 +1007,7 @@ roleRef:
   name: cert-manager-controller-certificatesigningrequests
 subjects:
   - name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
     kind: ServiceAccount
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -1023,7 +1023,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1033,13 +1033,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cert-manager-webhook
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cert-manager-cainjector:leaderelection
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cainjector
     app.kubernetes.io/name: cainjector
@@ -1049,7 +1049,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -1075,7 +1075,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cert-manager:leaderelection
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cert-manager
     app.kubernetes.io/name: cert-manager
@@ -1085,7 +1085,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -1110,7 +1110,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cert-manager-tokenrequest
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cert-manager
     app.kubernetes.io/name: cert-manager
@@ -1120,7 +1120,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -1137,7 +1137,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cert-manager-webhook:dynamic-serving
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: webhook
     app.kubernetes.io/name: webhook
@@ -1147,7 +1147,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 rules:
@@ -1173,7 +1173,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cert-manager-cainjector:leaderelection
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cainjector
     app.kubernetes.io/name: cainjector
@@ -1183,7 +1183,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1193,13 +1193,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cert-manager-cainjector
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cert-manager:leaderelection
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cert-manager
     app.kubernetes.io/name: cert-manager
@@ -1209,7 +1209,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1219,13 +1219,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cert-manager-cert-manager-tokenrequest
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: cert-manager
     app.kubernetes.io/name: cert-manager
@@ -1235,7 +1235,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1245,13 +1245,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cert-manager
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cert-manager-webhook:dynamic-serving
-  namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
     app: webhook
     app.kubernetes.io/name: webhook
@@ -1261,7 +1261,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 roleRef:
@@ -1271,83 +1271,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: cert-manager-webhook
-    namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-#
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
+    namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string

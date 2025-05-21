@@ -1,102 +1,346 @@
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: cert-manager-cainjector
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
+    app: cainjector
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/instance: cert-manager
+    app.kubernetes.io/component: cainjector
+    app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cainjector
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/component: cainjector
   template:
     metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-#
-# START crd
+      labels:
+        app: cainjector
+        app.kubernetes.io/name: cainjector
+        app.kubernetes.io/instance: cert-manager
+        app.kubernetes.io/component: cainjector
+        app.kubernetes.io/version: v1.17.2
+        platform.klearwave.io/capability: certificates
+        platform.klearwave.io/component: cert-manager
+        platform.klearwave.io/operator-version: unstable
+        platform.klearwave.io/platform-version: unstable
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/managed-by: certificates-operator
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9402"
+    spec:
+      serviceAccountName: cert-manager-cainjector
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      containers:
+        - name: cert-manager-cainjector
+          # +operator-builder:field:name=injector.image,default="quay.io/jetstack/cert-manager-cainjector:v1.17.2",type=string,description=`
+          # Image to use for cert-manager CA injector deployment.`
+          image: quay.io/jetstack/cert-manager-cainjector:v1.17.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --leader-election-namespace=$(POD_NAMESPACE)
+          ports:
+            - containerPort: 9402
+              name: http-metrics
+              protocol: TCP
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              # +operator-builder:field:name=injector.resources.requests.cpu,default="50m",type=string,description=`
+              # CPU requests to use for cert-manager CA injector deployment.`
+              cpu: 50m
+              # +operator-builder:field:name=injector.resources.requests.memory,default="64Mi",type=string,description=`
+              # Memory requests to use for cert-manager CA injector deployment.`
+              memory: 64Mi
+            limits:
+              # +operator-builder:field:name=injector.resources.limits.memory,default="128Mi",type=string,description=`
+              # Memory limits to use for cert-manager CA injector deployment.`
+              memory: 128Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+        platform.klearwave.io/node-type: platform
 ---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: cert-manager
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance: cert-manager
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cert-manager
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/component: controller
   template:
     metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
+      labels:
+        app: cert-manager
+        app.kubernetes.io/name: cert-manager
+        app.kubernetes.io/instance: cert-manager
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/version: v1.17.2
+        platform.klearwave.io/capability: certificates
+        platform.klearwave.io/component: cert-manager
+        platform.klearwave.io/operator-version: unstable
+        platform.klearwave.io/platform-version: unstable
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/managed-by: certificates-operator
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9402"
+    spec:
+      serviceAccountName: cert-manager
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      containers:
+        - name: cert-manager-controller
+          # +operator-builder:field:name=controller.image,default="quay.io/jetstack/cert-manager-controller:v1.17.2",type=string,description=`
+          # Image to use for cert-manager controller deployment.`
+          image: quay.io/jetstack/cert-manager-controller:v1.17.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --cluster-resource-namespace=$(POD_NAMESPACE)
+            - --leader-election-namespace=$(POD_NAMESPACE)
+            - --acme-http01-solver-image=quay.io/jetstack/cert-manager-acmesolver:v1.17.2
+            - --max-concurrent-challenges=60
+          ports:
+            - containerPort: 9402
+              name: http-metrics
+              protocol: TCP
+            - containerPort: 9403
+              name: http-healthz
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          livenessProbe:
+            httpGet:
+              port: http-healthz
+              path: /livez
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 15
+            successThreshold: 1
+            failureThreshold: 8
+          resources:
+            requests:
+              # +operator-builder:field:name=controller.resources.requests.cpu,default="25m",type=string,description=`
+              # CPU requests to use for cert-manager controller deployment.`
+              cpu: 25m
+              # +operator-builder:field:name=controller.resources.requests.memory,default="32Mi",type=string,description=`
+              # Memory requests to use for cert-manager controller deployment.`
+              memory: 32Mi
+            limits:
+              # +operator-builder:field:name=controller.resources.limits.memory,default="64Mi",type=string,description=`
+              # Memory limits to use for cert-manager controller deployment.`
+              memory: 64Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+        platform.klearwave.io/node-type: platform
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - cert-manager
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - cert-manager-cainjector
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - cert-manager-webhook
 ---
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  name: cert-manager-webhook
+  namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
+    app: webhook
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance: cert-manager
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webhook
+      app.kubernetes.io/instance: cert-manager
+      app.kubernetes.io/component: webhook
   template:
     metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-spec:
-  template:
-    metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-spec:
-  template:
-    metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-spec:
-  template:
-    metadata:
-      labels: <no value>
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
+      labels:
+        app: webhook
+        app.kubernetes.io/name: webhook
+        app.kubernetes.io/instance: cert-manager
+        app.kubernetes.io/component: webhook
+        app.kubernetes.io/version: v1.17.2
+        platform.klearwave.io/capability: certificates
+        platform.klearwave.io/component: cert-manager
+        platform.klearwave.io/operator-version: unstable
+        platform.klearwave.io/platform-version: unstable
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/managed-by: certificates-operator
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9402"
+    spec:
+      serviceAccountName: cert-manager-webhook
+      enableServiceLinks: false
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      containers:
+        - name: cert-manager-webhook
+          # +operator-builder:field:name=webhook.image,default="quay.io/jetstack/cert-manager-webhook:v1.17.2",type=string,description=`
+          # Image to use for cert-manager webhook deployment.`
+          image: quay.io/jetstack/cert-manager-webhook:v1.17.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - --v=2
+            - --secure-port=10250
+            - --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
+            - --dynamic-serving-ca-secret-name=cert-manager-webhook-ca
+            - --dynamic-serving-dns-names=cert-manager-webhook
+            - --dynamic-serving-dns-names=cert-manager-webhook.$(POD_NAMESPACE)
+            - --dynamic-serving-dns-names=cert-manager-webhook.$(POD_NAMESPACE).svc
+          ports:
+            - name: https
+              protocol: TCP
+              containerPort: 10250
+            - name: healthcheck
+              protocol: TCP
+              containerPort: 6080
+            - containerPort: 9402
+              name: http-metrics
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 6080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 6080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          resources:
+            requests:
+              # +operator-builder:field:name=webhook.resources.requests.cpu,default="25m",type=string,description=`
+              # CPU requests to use for cert-manager webhook deployment.`
+              cpu: 25m
+              # +operator-builder:field:name=webhook.resources.requests.memory,default="32Mi",type=string,description=`
+              # Memory requests to use for cert-manager webhook deployment.`
+              memory: 32Mi
+            limits:
+              # +operator-builder:field:name=webhook.resources.limits.memory,default="64Mi",type=string,description=`
+              # Memory limits to use for cert-manager webhook deployment.`
+              memory: 64Mi
+      nodeSelector:
+        kubernetes.io/os: linux
+        platform.klearwave.io/node-type: platform

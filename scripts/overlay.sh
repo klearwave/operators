@@ -22,6 +22,11 @@ if [ -z `which yot` ]; then
     exit 1
 fi
 
+if [ -z `which yq` ]; then
+    echo "yq not installed...please manually install..."
+    exit 1
+fi
+
 # ensure common values exist
 if [ ! -f ${CAPABILITY_DIR_BASE}/values.yaml ]; then
     echo "missing common values file at ${CAPABILITY_DIR_BASE}/values.yaml..."
@@ -50,9 +55,11 @@ for OVERLAY in `ls ${COMPONENT_DIR}/config/overlays`; do \
         --values-file=${CAPABILITY_DIR_SOURCE}/values.yaml \
         --values-file=${COMPONENT_DIR}/config/values.yaml \
         --remove-comments \
-        --stdout > ${COMPONENT_DIR}/manifests/${OVERLAY}
-    
-    # TODO: remove duplication in overlays for nukleros labels
+        --stdout | yq -r eval-all 'select((. != null) or (type != "!!null"))' > ${COMPONENT_DIR}/manifests/${OVERLAY}
+    # TODO: the yq logic removes blank yaml documents, but this should be handled in yot
+    # itself and not part of a one-off script
+
+    # TODO: remove duplication in overlays for common labels
     # run the stdout through our common overlays
     # yot \
     #    --path=- \

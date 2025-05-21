@@ -12,14 +12,17 @@ commonOverlays:
       app.kubernetes.io/version: "{{ .projectVersion }}"
       app.kubernetes.io/part-of: platform
       app.kubernetes.io/managed-by: certificates-operator
-    onMissing:
-      action: inject
 
   - name: "add common labels to pod template"
     query: "spec.template.metadata.labels"
-    value: "{{ .labels }}"
-    onMissing:
-      action: inject
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/version: "{{ .projectVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
 
   - name: "add namespace markers"
     query:
@@ -59,10 +62,7 @@ commonOverlays:
         drop: ["ALL"]
 
 yamlFiles:
-  #
-  # cert-manager controller
-  #
-  - name: "cert-manager controller deployment"
+  - name: "cert-manager deployments"
     path: "../../vendor/cert-manager.yaml"
     outputPath: "certificates/cert-manager/deployment.yaml"
     overlays:
@@ -72,18 +72,22 @@ yamlFiles:
         documentQuery:
           - conditions:
               - query: $[?($.kind != "Deployment")]
-          - conditions:
-              - query: $[?($.metadata.name == "cert-manager")]
 
-      - name: "add markers"
+      #
+      # cert-manager controller
+      #
+      - name: "add controller markers"
+        documentQuery:
+          - conditions:
+            - query: $[?($.metadata.name == "cert-manager")]
         value:
           spec:
             # +operator-builder:field:name=controller.replicas,default="{{ .controller.replicas }}",type=int,description=`
             # Number of replicas to use for the cert-manager controller deployment.`
             replicas: !!int {{ .controller.replicas }}
 
-      - name: "add container markers"
-        query: "spec.template.spec.containers[?(@.name == 'cert-manager')]"
+      - name: "add controller container markers"
+        query: "spec.template.spec.containers[?(@.name == 'cert-manager-controller')]"
         value:
           # +operator-builder:field:name=controller.image,default="%v",type=string,description=`
           # Image to use for cert-manager controller deployment.`
@@ -101,7 +105,10 @@ yamlFiles:
               # Memory limits to use for cert-manager controller deployment.`
               memory: "{{ .controller.resources.limits.memory }}"
 
-      - name: "set pod anti-affinity"
+      - name: "set controller pod anti-affinity"
+        documentQuery:
+          - conditions:
+            - query: $[?($.metadata.name == "cert-manager")]
         query: spec.template.spec
         action: merge
         value:
@@ -120,30 +127,20 @@ yamlFiles:
           nodeSelector:
             kubernetes.io/os: linux
 
-  #
-  # cert-manager injector
-  #
-  - name: "cert-manager injector deployment"
-    path: "../../vendor/cert-manager.yaml"
-    outputPath: "certificates/cert-manager/deployment.yaml"
-    overlays:
-      - name: "ensure we are only acting upon injector deployment resources"
-        query: "$"
-        action: delete
+      #
+      # cert-manager injector
+      #
+      - name: "add injector markers"
         documentQuery:
           - conditions:
-              - query: $[?($.kind != "Deployment")]
-          - conditions:
-              - query: $[?($.metadata.name == "cert-manager-cainjector")]
-
-      - name: "add markers"
+            - query: $[?($.metadata.name == "cert-manager-cainjector")]
         value:
           spec:
             # +operator-builder:field:name=injector.replicas,default="{{ .injector.replicas }}",type=int,description=`
             # Number of replicas to use for the cert-manager cainjector deployment.`
             replicas: !!int {{ .injector.replicas }}
 
-      - name: "add container markers"
+      - name: "add injector container markers"
         query: "spec.template.spec.containers[?(@.name == 'cert-manager-cainjector')]"
         value:
           # +operator-builder:field:name=injector.image,default="%v",type=string,description=`
@@ -162,7 +159,10 @@ yamlFiles:
               # Memory limits to use for cert-manager CA injector deployment.`
               memory: "{{ .injector.resources.limits.memory }}"
 
-      - name: "set pod anti-affinity"
+      - name: "set injector pod anti-affinity"
+        documentQuery:
+          - conditions:
+            - query: $[?($.metadata.name == "cert-manager")]
         query: spec.template.spec
         action: merge
         value:
@@ -181,30 +181,20 @@ yamlFiles:
           nodeSelector:
             kubernetes.io/os: linux
   
-  #
-  # cert-manager webhook
-  #
-  - name: "cert-manager webhook deployment"
-    path: "../../vendor/cert-manager.yaml"
-    outputPath: "certificates/cert-manager/deployment.yaml"
-    overlays:
-      - name: "ensure we are only acting upon controller deployment resources"
-        query: "$"
-        action: delete
+      #
+      # cert-manager webhook
+      #
+      - name: "add webhook markers"
         documentQuery:
           - conditions:
-              - query: $[?($.kind != "Deployment")]
-          - conditions:
-              - query: $[?($.metadata.name == "cert-manager-webhook")]
-
-      - name: "add markers"
+            - query: $[?($.metadata.name == "cert-manager-webhook")]
         value:
           spec:
             # +operator-builder:field:name=webhook.replicas,default="{{ .webhook.replicas }}",type=int,description=`
             # Number of replicas to use for the cert-manager webhook deployment.`
             replicas: !!int {{ .webhook.replicas }}
 
-      - name: "add container markers"
+      - name: "add webhook container markers"
         query: "spec.template.spec.containers[?(@.name == 'cert-manager-webhook')]"
         value:
           # +operator-builder:field:name=webhook.image,default="%v",type=string,description=`
@@ -223,7 +213,10 @@ yamlFiles:
               # Memory limits to use for cert-manager webhook deployment.`
               memory: "{{ .webhook.resources.limits.memory }}"
 
-      - name: "set pod anti-affinity"
+      - name: "set webhook pod anti-affinity"
+        documentQuery:
+          - conditions:
+            - query: $[?($.metadata.name == "cert-manager")]
         query: spec.template.spec
         action: merge
         value:

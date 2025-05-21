@@ -1,82 +1,7 @@
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
 #
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
-metadata:
-  labels:
-    platform.klearwave.io/capability: certificates
-    platform.klearwave.io/component: cert-manager
-    platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
-    app.kubernetes.io/version: v1.17.2
-    app.kubernetes.io/part-of: platform
-    app.kubernetes.io/managed-by: certificates-operator
-
-# Source: cert-manager/templates/crds.yaml
-# START crd
----
+# NOTE: there were manually removed empty docs here.  we may see this again unless cert-manager fixes empty
+#       docs in their release artifact upstream
+#
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
@@ -90,7 +15,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
   annotations:
@@ -116,7 +41,7 @@ webhooks:
     clientConfig:
       service:
         name: cert-manager-webhook
-        namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+        namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
         path: /mutate
 ---
 apiVersion: admissionregistration.k8s.io/v1
@@ -132,7 +57,7 @@ metadata:
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
     platform.klearwave.io/operator-version: unstable
-    platform.klearwave.io/platform-version: <no value>
+    platform.klearwave.io/platform-version: unstable
     app.kubernetes.io/part-of: platform
     app.kubernetes.io/managed-by: certificates-operator
   annotations:
@@ -166,5 +91,5 @@ webhooks:
     clientConfig:
       service:
         name: cert-manager-webhook
-        namespace: kw-certificates-system # +operator-builder:field:name=namespace,default="kw-certificates-system",type=string
+        namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
         path: /validate

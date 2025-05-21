@@ -12,8 +12,6 @@ commonOverlays:
       app.kubernetes.io/version: "{{ .projectVersion }}"
       app.kubernetes.io/part-of: platform
       app.kubernetes.io/managed-by: certificates-operator
-    onMissing:
-      action: inject
 
   - name: "add namespace markers"
     query:
