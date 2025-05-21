@@ -1,0 +1,48 @@
+---
+commonOverlays:
+  - name: "add common labels"
+    query:
+      - metadata.labels
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/version: "{{ .projectVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
+    onMissing:
+      action: inject
+
+  - name: "add namespace markers"
+    query:
+      - metadata.namespace
+      - subjects[*].namespace
+    value: "{{ .defaultNamespace }}"  # +operator-builder:field:name=namespace,default="{{ .defaultNamespace }}",type=string
+
+yamlFiles:
+  - name: "cert-manager rbac"
+    path: "../../vendor/cert-manager.yaml"
+    outputPath: "certificates/cert-manager/rbac.yaml"
+    overlays:
+      - name: "ensure we are only acting upon rbac resources"
+        query: "$"
+        action: delete
+        documentQuery:
+          - conditions:
+              - query: $[?($.kind != "ServiceAccount")]
+              - query: $[?($.kind != "Role")]
+              - query: $[?($.kind != "RoleBinding")]
+              - query: $[?($.kind != "ClusterRole")]
+              - query: $[?($.kind != "ClusterRoleBinding")]
+
+      - name: "add identity as an arbitrary marker"
+        documentQuery:
+          - conditions:
+              - query: $[?($.metadata.name == "cert-manager")]
+              - query: $[?($.kind == "ServiceAccount")]
+        query: metadata.name
+        value:
+          # +operator-builder:field:name=aws.roleARN,arbitrary,default="",type=string,description=`
+          # The AWS IAM Role ARN to use for validating public DNS records for issuing public certificates.` 
+          "%v"

@@ -1,0 +1,102 @@
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+#
+# START crd
+---
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+# START crd
+---
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+# START crd
+---
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+# START crd
+---
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+# START crd
+---
+metadata:
+  labels:
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: <no value>
+    app.kubernetes.io/version: v1.17.2
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  template:
+    metadata:
+      labels: <no value>
+
+# Source: cert-manager/templates/crds.yaml
+# START crd

@@ -1,0 +1,19 @@
+kind: StandaloneWorkload
+name: cert-manager
+spec:
+  api:
+    clusterScoped: true
+    domain: platform.tbd.io
+    group: certificates
+    kind: CertManager
+    version: v1alpha1
+  companionCliRootcmd:
+    name: certificatesctl
+    description: Manage the certificates capability
+  resources:
+    - cert-manager/manifests/crds.yaml
+    - cert-manager/manifests/rbac.yaml
+    - cert-manager/manifests/deployment.yaml
+    - cert-manager/manifests/service.yaml
+    - cert-manager/manifests/issuer-internal.yaml
+    - cert-manager/manifests/webhook.yaml

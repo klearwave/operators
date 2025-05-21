@@ -1,0 +1,19 @@
+kind: StandaloneWorkload
+name: trust-manager
+spec:
+  api:
+    clusterScoped: true
+    domain: platform.tbd.io
+    group: certificates
+    kind: TrustManager
+    version: v1alpha1
+  companionCliRootcmd:
+    name: certificatesctl
+    description: Manage the certificates capability
+  resources:
+    - trust-manager/manifests/crds.yaml
+    - trust-manager/manifests/rbac.yaml
+    - trust-manager/manifests/certificates.yaml
+    - trust-manager/manifests/deployment.yaml
+    - trust-manager/manifests/service.yaml
+    - trust-manager/manifests/webhook.yaml

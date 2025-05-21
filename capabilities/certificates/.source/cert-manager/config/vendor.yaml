@@ -1,0 +1,10 @@
+---
+apiVersion: vendir.k14s.io/v1alpha1
+kind: Config
+minimumRequiredVersion: 0.30.0
+directories:
+  - path: capabilities/certificates/.source/cert-manager/vendor
+    contents:
+      - path: ./
+        http:
+          url: https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml

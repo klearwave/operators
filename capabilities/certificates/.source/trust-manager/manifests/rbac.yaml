@@ -1,0 +1,215 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: trust-manager
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+  name: trust-manager
+rules:
+  - apiGroups:
+      - trust.cert-manager.io
+    resources:
+      - bundles
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - trust.cert-manager.io
+    resources:
+      - bundles/finalizers
+    verbs:
+      - update
+  - apiGroups:
+      - trust.cert-manager.io
+    resources:
+      - bundles/status
+    verbs:
+      - patch
+  - apiGroups:
+      - trust.cert-manager.io
+    resources:
+      - bundles
+    verbs:
+      - update
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+      - list
+      - create
+      - update
+      - patch
+      - watch
+      - delete
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+  name: trust-manager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: trust-manager
+subjects:
+  - kind: ServiceAccount
+    name: trust-manager
+    namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trust-manager
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trust-manager:leaderelection
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+rules:
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - get
+      - create
+      - update
+      - watch
+      - list
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trust-manager
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: trust-manager
+subjects:
+  - kind: ServiceAccount
+    name: trust-manager
+    namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: trust-manager:leaderelection
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: trust-manager:leaderelection
+subjects:
+  - kind: ServiceAccount
+    name: trust-manager
+    namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string

@@ -1,0 +1,28 @@
+---
+commonOverlays:
+  - name: "add common labels"
+    query:
+      - metadata.labels
+    action: merge
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/version: "{{ .projectVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
+    onMissing:
+      action: inject
+
+yamlFiles:
+  - name: "cert-manager custom resource definitions"
+    path: "../../vendor/cert-manager.yaml"
+    outputPath: "certificates/cert-manager/crds.yaml"
+    overlays:
+      - name: "ensure we are only acting upon crds"
+        query: "$"
+        action: delete
+        documentQuery:
+          - conditions:
+              - query: $[?($.kind != "CustomResourceDefinition")]

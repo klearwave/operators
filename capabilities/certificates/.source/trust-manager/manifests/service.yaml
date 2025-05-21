@@ -1,0 +1,56 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trust-manager-metrics
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app: trust-manager
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9402
+      targetPort: 9402
+      protocol: TCP
+      name: metrics
+  selector:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/component: trust-manager
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trust-manager
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app: trust-manager
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 443
+      targetPort: 6443
+      protocol: TCP
+      name: webhook
+  selector:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/component: trust-manager

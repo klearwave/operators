@@ -1,0 +1,142 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trust-manager
+  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  labels:
+    app.kubernetes.io/name: trust-manager
+    app.kubernetes.io/instance: trust-manager
+    app.kubernetes.io/version: v0.9.2
+    app: trust-manager
+    app.kubernetes.io/component: trust-manager
+    capabilities.tbd.io/capability: certificates
+    capabilities.tbd.io/version: v0.0.1
+    capabilities.tbd.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  # +operator-builder:field:name=controller.replicas,default="2",type=int,description=`
+  # Number of replicas to use for the trust-manager controller deployment.`
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: trust-manager
+      app.kubernetes.io/instance: trust-manager
+      app.kubernetes.io/component: trust-manager
+  template:
+    metadata:
+      labels:
+        app: trust-manager
+        app.kubernetes.io/name: trust-manager
+        app.kubernetes.io/instance: trust-manager
+        app.kubernetes.io/version: v0.9.2
+        app.kubernetes.io/component: trust-manager
+        capabilities.tbd.io/capability: certificates
+        capabilities.tbd.io/version: v0.0.1
+        capabilities.tbd.io/platform-version: unstable
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/managed-by: certificates-operator
+    spec:
+      serviceAccountName: trust-manager
+      initContainers:
+        - name: cert-manager-package-debian
+          image: quay.io/jetstack/cert-manager-package-debian:20210119.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - /copyandmaybepause
+            - /debian-package
+            - /packages
+          volumeMounts:
+            - mountPath: /packages
+              name: packages
+              readOnly: false
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      containers:
+        - name: trust-manager
+          # +operator-builder:field:name=controller.image,default="quay.io/jetstack/trust-manager:v0.9.2",type=string,description=`
+          # Image to use for trust-manager controller deployment.`
+          image: quay.io/jetstack/trust-manager:v0.9.2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6443
+            - containerPort: 9402
+          readinessProbe:
+            httpGet:
+              port: 6060
+              path: /readyz
+            initialDelaySeconds: 3
+            periodSeconds: 7
+          command:
+            - trust-manager
+          args:
+            - --log-level=1
+            - --metrics-port=9402
+            - --readiness-probe-port=6060
+            - --readiness-probe-path=/readyz
+            - --trust-namespace=tbd-certificates-system # +operator-builder:field:name=namespace,replace=tbd-certificates-system,default="tbd-certificates-system",type=string
+            - --webhook-host=0.0.0.0
+            - --webhook-port=6443
+            - --webhook-certificate-dir=/tls
+            - --default-package-location=/packages/cert-manager-package-debian.json
+          volumeMounts:
+            - mountPath: /tls
+              name: tls
+              readOnly: true
+            - mountPath: /packages
+              name: packages
+              readOnly: true
+          resources:
+            requests:
+              # +operator-builder:field:name=controller.resources.requests.cpu,default="25m",type=string,description=`
+              # CPU requests to use for trust-manager controller deployment.`
+              cpu: 25m
+              # +operator-builder:field:name=controller.resources.requests.memory,default="32Mi",type=string,description=`
+              # Memory requests to use for trust-manager controller deployment.`
+              memory: 32Mi
+            limits:
+              # +operator-builder:field:name=controller.resources.limits.memory,default="64Mi",type=string,description=`
+              # Memory limits to use for trust-manager controller deployment.`
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+      nodeSelector:
+        kubernetes.io/os: linux
+        tbd.io/node-type: platform
+      volumes:
+        - name: packages
+          emptyDir:
+            sizeLimit: 50M
+        - name: tls
+          secret:
+            defaultMode: 420
+            secretName: trust-manager
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - trust-manager

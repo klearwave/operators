@@ -1,0 +1,33 @@
+---
+commonOverlays:
+  - name: "add common labels"
+    query:
+      - metadata.labels
+    action: merge
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/version: "{{ .projectVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
+    onMissing:
+      action: inject
+
+  - name: "add namespace markers"
+    query:
+      - metadata.namespace
+    value: "{{ .defaultNamespace }}"  # +operator-builder:field:name=namespace,default="{{ .defaultNamespace }}",type=string
+
+yamlFiles:
+  - name: "cert-manager services"
+    path: "../../vendor/cert-manager.yaml"
+    outputPath: "certificates/cert-manager/service.yaml"
+    overlays:
+      - name: "ensure we are only acting upon service resources"
+        query: "$"
+        action: delete
+        documentQuery:
+          - conditions:
+              - query: $[?($.kind != "Service")]
