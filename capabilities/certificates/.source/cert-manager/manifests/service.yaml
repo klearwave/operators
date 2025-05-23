@@ -4,10 +4,7 @@ metadata:
   name: cert-manager-cainjector
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -23,8 +20,10 @@ spec:
       name: http-metrics
   selector:
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: unstable
 ---
 apiVersion: v1
 kind: Service
@@ -32,10 +31,7 @@ metadata:
   name: cert-manager
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -52,8 +48,10 @@ spec:
       targetPort: 9402
   selector:
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: unstable
 ---
 apiVersion: v1
 kind: Service
@@ -61,10 +59,7 @@ metadata:
   name: cert-manager-webhook
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -85,5 +80,7 @@ spec:
       targetPort: http-metrics
   selector:
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: cert-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: unstable

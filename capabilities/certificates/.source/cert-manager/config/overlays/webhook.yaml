@@ -9,14 +9,30 @@ commonOverlays:
       platform.klearwave.io/component: "{{ .component }}"
       platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
       platform.klearwave.io/platform-version: "{{ .platformVersion }}"
-      app.kubernetes.io/version: "{{ .projectVersion }}"
       app.kubernetes.io/part-of: platform
       app.kubernetes.io/managed-by: certificates-operator
+
+  - name: "remove redundant labels and potential helm data"
+    query: 
+      - metadata.labels["helm.sh/chart"]
+      - spec.template.metadata.labels["helm.sh/chart"]
+      - metadata.annotations["helm.sh/resource-policy"]
+      - metadata.labels["app"]
+      - metadata.labels["app.kubernetes.io/instance"]
+      - metadata.labels["app.kubernetes.io/component"]
+      - spec.template.metadata.labels["app"]
+      - spec.template.metadata.labels["app.kubernetes.io/instance"]
+      - spec.template.metadata.labels["app.kubernetes.io/component"]
+      - spec.selector.matchLabels["app"]
+      - spec.selector.matchLabels["app.kubernetes.io/instance"]
+      - spec.selector.matchLabels["app.kubernetes.io/component"]
+      - spec.selector["app.kubernetes.io/instance"]
+      - spec.selector["app.kubernetes.io/component"]
+    action: delete
 
   - name: "add namespace markers"
     query:
       - metadata.namespace
-      - subjects[*].namespace
       - "webhooks[*].clientConfig.service.namespace"
     value: "{{ .defaultNamespace }}"  # +operator-builder:field:name=namespace,default="{{ .defaultNamespace }}",type=string
 
@@ -36,5 +52,5 @@ yamlFiles:
       - name: "set namespace in CA reference annotation"
         query: "metadata.annotations"
         value:
-          # +operator-builder:field:name=namespace,type=string,replace="certs-namespace"
-          cert-manager.io/inject-ca-from-secret: certs-namespace/cert-manager-webhook-ca
+          # +operator-builder:field:name=namespace,type=string,replace="{{ .defaultNamespace }}"
+          cert-manager.io/inject-ca-from-secret: "{{ .defaultNamespace }}/cert-manager-webhook-ca"

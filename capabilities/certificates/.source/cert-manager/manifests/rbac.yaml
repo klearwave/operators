@@ -5,10 +5,7 @@ metadata:
   name: cert-manager-cainjector
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -26,10 +23,7 @@ metadata:
   # The AWS IAM Role ARN to use for validating public DNS records for issuing public certificates.` 
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -45,10 +39,7 @@ metadata:
   name: cert-manager-webhook
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -62,10 +53,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-cainjector
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -136,10 +124,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-issuers
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -188,10 +173,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-clusterissuers
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -240,10 +222,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-certificates
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -315,10 +294,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-orders
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -387,10 +363,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-challenges
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -498,10 +471,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-ingress-shim
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -573,10 +543,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-cluster-view
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     rbac.authorization.k8s.io/aggregate-to-cluster-reader: "true"
     platform.klearwave.io/capability: certificates
@@ -600,10 +567,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-view
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
@@ -641,10 +605,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-edit
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-admin: "true"
@@ -690,10 +651,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-approve:cert-manager-io
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cert-manager
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -717,10 +675,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-controller-certificatesigningrequests
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cert-manager
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -766,10 +721,7 @@ kind: ClusterRole
 metadata:
   name: cert-manager-webhook:subjectaccessreviews
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -790,10 +742,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-cainjector
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -815,10 +764,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-issuers
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -840,10 +786,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-clusterissuers
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -865,10 +808,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-certificates
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -890,10 +830,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-orders
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -915,10 +852,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-challenges
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -940,10 +874,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-ingress-shim
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -965,10 +896,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-approve:cert-manager-io
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cert-manager
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -990,10 +918,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-controller-certificatesigningrequests
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cert-manager
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1015,10 +940,7 @@ kind: ClusterRoleBinding
 metadata:
   name: cert-manager-webhook:subjectaccessreviews
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1041,10 +963,7 @@ metadata:
   name: cert-manager-cainjector:leaderelection
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1077,10 +996,7 @@ metadata:
   name: cert-manager:leaderelection
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1112,10 +1028,7 @@ metadata:
   name: cert-manager-tokenrequest
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1139,10 +1052,7 @@ metadata:
   name: cert-manager-webhook:dynamic-serving
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1175,10 +1085,7 @@ metadata:
   name: cert-manager-cainjector:leaderelection
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cainjector
     app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: cainjector
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1201,10 +1108,7 @@ metadata:
   name: cert-manager:leaderelection
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1227,10 +1131,7 @@ metadata:
   name: cert-manager-cert-manager-tokenrequest
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: cert-manager
     app.kubernetes.io/name: cert-manager
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: controller
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
@@ -1253,10 +1154,7 @@ metadata:
   name: cert-manager-webhook:dynamic-serving
   namespace: klearwave-certificates-system # +operator-builder:field:name=namespace,default="klearwave-certificates-system",type=string
   labels:
-    app: webhook
     app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/component: webhook
     app.kubernetes.io/version: v1.17.2
     platform.klearwave.io/capability: certificates
     platform.klearwave.io/component: cert-manager
