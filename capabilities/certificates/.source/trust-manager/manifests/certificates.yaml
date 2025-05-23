@@ -1,28 +1,25 @@
----
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: trust-manager
-  namespace: tbd-certificates-system # +operator-builder:field:name=namespace,default="tbd-certificates-system",type=string
+  namespace: klearwave-certificates-system
   labels:
     app.kubernetes.io/name: trust-manager
-    app.kubernetes.io/instance: trust-manager
-    app.kubernetes.io/version: v0.9.2
-    app: trust-manager
-    app.kubernetes.io/component: trust-manager
-    capabilities.tbd.io/capability: certificates
-    capabilities.tbd.io/version: v0.0.1
-    capabilities.tbd.io/platform-version: unstable
-    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: v0.17.1
     app.kubernetes.io/managed-by: certificates-operator
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/component: trust-manager
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
 spec:
-  commonName: trust-manager.tbd-certificates-system.svc
+  commonName: trust-manager.klearwave-certificates-system.svc
   dnsNames:
     - trust-manager
-    - trust-manager.tbd-certificates-system
-    - trust-manager.tbd-certificates-system.svc
-    - trust-manager.tbd-certificates-system.svc.local
-  secretName: trust-manager
+    - trust-manager.klearwave-certificates-system
+    - trust-manager.klearwave-certificates-system.svc
+    - trust-manager.klearwave-certificates-system.svc.local
+  secretName: trust-manager-tls
   revisionHistoryLimit: 1
   issuerRef:
     name: internal
