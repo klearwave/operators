@@ -60,7 +60,7 @@ yamlFiles:
       - name: "ensure secret name is used correctly"
         query: spec.secretName
         action: replace
-        value: "trust-manager-tls"
+        value: "trust-manager-cert"
 
       - name: "ensure certificate common name generated correctly"
         query: spec.commonName

@@ -53,4 +53,4 @@ yamlFiles:
         query: "metadata.annotations"
         value:
           # +operator-builder:field:name=namespace,type=string,replace="{{ .defaultNamespace }}"
-          cert-manager.io/inject-ca-from: "{{ .defaultNamespace }}/trust-manager-tls"
+          cert-manager.io/inject-ca-from: "{{ .defaultNamespace }}/trust-manager-cert"

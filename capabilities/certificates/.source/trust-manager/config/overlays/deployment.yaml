@@ -140,5 +140,4 @@ yamlFiles:
 
       - name: "adjust secret name"
         query: spec.template.spec.volumes[?(@.name == "tls")].secret.secretName
-        value: trust-manager-tls
-
+        value: trust-manager-cert
