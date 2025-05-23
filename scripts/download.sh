@@ -22,6 +22,12 @@ if [ -z `which vendir` ]; then
     exit 1
 fi
 
+# ensure helm is installed
+if [ -z `which helm` ]; then
+    echo "helm not installed...please install manually..."
+    exit 1
+fi
+
 VENDIR_CONFIG=${COMPONENT_DIR}/config/vendor.yaml
 VENDIR_CONFIG_LOCK=${COMPONENT_DIR}/config/vendor.yaml.lock
 
@@ -36,3 +42,14 @@ fi
 vendir sync \
     --file $VENDIR_CONFIG \
     --lock-file $VENDIR_CONFIG_LOCK
+
+# if we produced a vendor-helm directory in the project, we must template it
+if [ -d ${COMPONENT_DIR}/vendor-helm ]; then
+    # ensure the vendir directory exists
+    mkdir -p ${COMPONENT_DIR}/vendor
+
+    # ensure the vendir directory is clean
+    rm -rf ${COMPONENT_DIR}/vendor/*
+
+    helm template ${COMPONENT} ${COMPONENT_DIR}/vendor-helm --include-crds | tee ${COMPONENT_DIR}/vendor/${COMPONENT}.yaml
+fi
