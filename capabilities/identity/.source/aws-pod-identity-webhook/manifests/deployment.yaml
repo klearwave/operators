@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-pod-identity-webhook
+  namespace: klearwave-identity-system
+  labels:
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/component: aws-pod-identity-webhook
+    platform.klearwave.io/operator-version: unstable
+    platform.klearwave.io/platform-version: unstable
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/managed-by: certificates-operator
+spec:
+  # +operator-builder:field:name=replicas,default="1",type=int,description=`
+  # Number of replicas to use for the AWS pod identity webhook deployment.`
+  replicas: 1
+  selector:
+    matchLabels:
+      platform.klearwave.io/capability: identity
+      platform.klearwave.io/component: aws-pod-identity-webhook
+      platform.klearwave.io/operator-version: unstable
+      platform.klearwave.io/platform-version: unstable
+  template:
+    metadata:
+      labels:
+        platform.klearwave.io/capability: identity
+        platform.klearwave.io/component: aws-pod-identity-webhook
+        platform.klearwave.io/operator-version: unstable
+        platform.klearwave.io/platform-version: unstable
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/managed-by: certificates-operator
+    spec:
+      serviceAccountName: aws-pod-identity-webhook
+      containers:
+        - name: aws-pod-identity-webhook
+          # +operator-builder:field:name=webhook.image,default="amazon/amazon-eks-pod-identity-webhook:v0.6.7",type=string,description=`
+          # Image to use for AWS pod identity webhook deployment.`
+          image: amazon/amazon-eks-pod-identity-webhook:v0.6.7
+          imagePullPolicy: Always
+          command:
+            - /webhook
+            - --in-cluster=false
+            - --namespace=klearwave-identity-system # +operator-builder:field:name=namespace,replace=klearwave-identity-system,default="klearwave-identity-system",type=string
+            - --service-name=aws-pod-identity-webhook
+            - --annotation-prefix=eks.amazonaws.com
+            - --token-audience=kubernetes.default.svc
+            - --logtostderr
+            - --port=9443
+          volumeMounts:
+            - name: cert
+              mountPath: /etc/webhook/certs
+              readOnly: true
+          resources:
+            requests:
+              # +operator-builder:field:name=webhook.resources.requests.cpu,default="25m",type=string,description=`
+              # CPU requests to use for AWS pod identity webhook deployment.`
+              cpu: 25m
+              # +operator-builder:field:name=webhook.resources.requests.memory,default="32Mi",type=string,description=`
+              # Memory requests to use for AWS pod identity webhook deployment.`
+              memory: 32Mi
+            limits:
+              # +operator-builder:field:name=webhook.resources.limits.memory,default="64Mi",type=string,description=`
+              # Memory limits to use for AWS pod identity webhook deployment.`
+              memory: 64Mi
+      volumes:
+        - name: cert
+          secret:
+            secretName: aws-pod-identity-webhook-cert
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - aws-pod-identity-webhook
+      nodeSelector:
+        kubernetes.io/os: linux

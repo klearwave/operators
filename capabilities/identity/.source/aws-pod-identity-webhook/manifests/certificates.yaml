@@ -1,0 +1,19 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aws-pod-identity-webhook
+  namespace: klearwave-identity-system # +operator-builder:field:name=namespace,default="klearwave-identity-system",type=string
+spec:
+  secretName: aws-pod-identity-webhook-cert
+  commonName: aws-pod-identity-webhook.klearwave-identity-system.svc
+  dnsNames:
+    - aws-pod-identity-webhook
+    - aws-pod-identity-webhook.klearwave-identity-system
+    - aws-pod-identity-webhook.klearwave-identity-system.svc
+    - aws-pod-identity-webhook.klearwave-identity-system.svc.local
+  isCA: true
+  duration: 2160h
+  renewBefore: 360h
+  issuerRef:
+    name: internal
+    kind: ClusterIssuer

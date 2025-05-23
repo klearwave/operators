@@ -1,0 +1,16 @@
+---
+defaultNamespace: klearwave-identity-system
+projectVersion: v0.6.7
+operatorVersion: unstable
+platformVersion: unstable
+component: aws-pod-identity-webhook
+webhook:
+  image: amazon/amazon-eks-pod-identity-webhook
+  replicas: 1
+  listenPort: 9443
+  resources:
+    requests:
+      cpu: "25m"
+      memory: "32Mi"
+    limits:
+      memory: "64Mi"

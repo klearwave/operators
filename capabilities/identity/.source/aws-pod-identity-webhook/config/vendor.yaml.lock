@@ -1,0 +1,11 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: 'Merge pull request #267 from Ganiredi/v1.33.0...'
+      sha: ff7e828cfe04f6c4821b93c42c7b1ae3af0926db
+      tags:
+      - v0.6.7
+    path: .
+  path: capabilities/identity/.source/aws-pod-identity-webhook/vendor
+kind: LockConfig

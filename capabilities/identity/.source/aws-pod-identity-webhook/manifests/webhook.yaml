@@ -1,0 +1,34 @@
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: aws-pod-identity-webhook
+  namespace: klearwave-identity-system # +operator-builder:field:name=namespace,default="klearwave-identity-system",type=string
+  annotations:
+    # +operator-builder:field:name=namespace,type=string,replace="klearwave-identity-system"
+    cert-manager.io/inject-ca-from: klearwave-identity-system/aws-pod-identity-webhook-cert
+webhooks:
+  - name: pod-identity-webhook.amazonaws.com
+    failurePolicy: Ignore
+    clientConfig:
+      service:
+        name: aws-pod-identity-webhook
+        namespace: klearwave-identity-system # +operator-builder:field:name=namespace,default="klearwave-identity-system",type=string
+        path: /mutate
+    objectSelector:
+      matchExpressions:
+        - key: eks.amazonaws.com/skip-pod-identity-webhook
+          operator: DoesNotExist
+          values: []
+    rules:
+      - operations:
+          - CREATE
+        apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        resources:
+          - pods
+    sideEffects: None
+    admissionReviewVersions:
+      - v1beta1

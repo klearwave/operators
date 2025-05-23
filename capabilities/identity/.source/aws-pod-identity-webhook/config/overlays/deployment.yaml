@@ -1,0 +1,165 @@
+---
+commonOverlays:
+  - name: "add common labels"
+    query:
+      - metadata.labels
+    action: merge
+    onMissing:
+      action: inject
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
+
+  - name: "add selector labels"
+    query:
+      - spec.selector.matchLabels
+    action: merge
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+
+  - name: "add common labels to pod template"
+    query: "spec.template.metadata.labels"
+    value:
+      platform.klearwave.io/capability: "{{ .capability }}"
+      platform.klearwave.io/component: "{{ .component }}"
+      platform.klearwave.io/operator-version: "{{ .operatorVersion }}"
+      platform.klearwave.io/platform-version: "{{ .platformVersion }}"
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/managed-by: certificates-operator
+
+  - name: "remove redundant labels and potential helm data"
+    query: 
+      - metadata.labels["helm.sh/chart"]
+      - spec.template.metadata.labels["helm.sh/chart"]
+      - metadata.annotations["helm.sh/resource-policy"]
+      - metadata.labels["app"]
+      - metadata.labels["app.kubernetes.io/instance"]
+      - metadata.labels["app.kubernetes.io/component"]
+      - spec.template.metadata.labels["app"]
+      - spec.template.metadata.labels["app.kubernetes.io/instance"]
+      - spec.template.metadata.labels["app.kubernetes.io/component"]
+      - spec.selector.matchLabels["app"]
+      - spec.selector.matchLabels["app.kubernetes.io/instance"]
+      - spec.selector.matchLabels["app.kubernetes.io/component"]
+      - spec.selector["app.kubernetes.io/instance"]
+      - spec.selector["app.kubernetes.io/component"]
+    action: delete
+
+  - name: "set the name to prefix with aws"
+    query: metadata.name
+    value: "{{ .component }}"
+    action: replace
+
+  - name: "add node selector"
+    query: spec.template.spec.nodeSelector
+    value:
+      tbd.io/node-type: platform
+
+yamlFiles:
+  - name: "aws-pod-identity-webhook deployment"
+    path: "../../vendor/deployment-base.yaml"
+    outputPath: "identity/aws-pod-identity-webhook/deployment.yaml"
+    overlays:
+      - name: "ensure we are only acting upon deployment resources"
+        query: "$"
+        action: delete
+        documentQuery:
+          - conditions:
+              - query: $[?($.kind != "Deployment")]
+
+      - name: "ensure namespace is updated"
+        query: metadata.namespace
+        value: "{{ .defaultNamespace }}"
+
+      - name: "add aws-pod-identity webhook replica count marker"
+        query: "$[?($.metadata.name == 'aws-pod-identity-webhook')]"
+        value:
+          spec:
+            # +operator-builder:field:name=replicas,default="{{ .webhook.replicas }}",type=int,description=`
+            # Number of replicas to use for the AWS pod identity webhook deployment.`
+            replicas: !!int {{ .webhook.replicas }}
+
+      - name: "ensure container security context is updated"
+        query: spec.template.spec.containers[*].securityContext
+        action: replace
+        onMissing:
+          action: inject
+        value:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+
+      - name: "add aws-pod-identity webhook image name markers"
+        query: "spec.template.spec.containers[?(@.name == 'pod-identity-webhook')]"
+        value:
+          name: "{{ .component }}"
+          command:
+            - --port={{ .webhook.listenPort }}
+          # +operator-builder:field:name=webhook.image,default="{{ .webhook.image }}:{{ .projectVersion }}",type=string,description=`
+          # Image to use for AWS pod identity webhook deployment.`
+          image: "{{ .webhook.image }}:{{ .projectVersion }}"
+          resources:
+            requests:
+              # +operator-builder:field:name=webhook.resources.requests.cpu,default="{{ .webhook.resources.requests.cpu }}",type=string,description=`
+              # CPU requests to use for AWS pod identity webhook deployment.`
+              cpu: "{{ .webhook.resources.requests.cpu }}"
+              # +operator-builder:field:name=webhook.resources.requests.memory,default="{{ .webhook.resources.requests.memory }}",type=string,description=`
+              # Memory requests to use for AWS pod identity webhook deployment.`
+              memory: "{{ .webhook.resources.requests.memory }}"
+            limits:
+              # +operator-builder:field:name=webhook.resources.limits.memory,default="{{ .webhook.resources.limits.memory }}",type=string,description=`
+              # Memory limits to use for AWS pod identity webhook deployment.`
+              memory: "{{ .webhook.resources.limits.memory }}"
+
+      - name: "ensure namespace is updated"
+        query: spec.template.spec.containers[?(@.name == "aws-pod-identity-webhook")].command[?(@ =~ /^--namespace\=/)]
+        value: "--namespace={{ .defaultNamespace }}" # +operator-builder:field:name=namespace,replace={{ .defaultNamespace }},default="{{ .defaultNamespace }}",type=string
+
+      - name: "service name is updated"
+        query: spec.template.spec.containers[?(@.name == "aws-pod-identity-webhook")].command[?(@ =~ /^--service-name\=/)]
+        value: "--service-name={{ .component }}"
+
+      - name: "ensure audience is updated"
+        query: spec.template.spec.containers[?(@.name == "aws-pod-identity-webhook")].command[?(@ =~ /^--token-audience\=/)]
+        value: "--token-audience=kubernetes.default.svc"
+
+      - name: "ensure affinity is set"
+        query: spec.template.spec
+        action: merge
+        value:
+          serviceAccountName: "{{ .component }}"
+          securityContext:
+            fsGroup: 1001
+            runAsUser: 1001
+            runAsGroup: 1001
+            runAsNonRoot: true
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - weight: 100
+                  podAffinityTerm:
+                    topologyKey: kubernetes.io/hostname
+                    labelSelector:
+                      matchExpressions:
+                        - key: app.kubernetes.io/name
+                          operator: In
+                          values:
+                            - aws-pod-identity-webhook
+          nodeSelector:
+            kubernetes.io/os: linux
+        documentQuery:
+          - conditions:
+              - query: $[?($.metadata.name == "aws-pod-identity-webhook")]
+
+      - name: "ensure volume name is set"
+        query: spec.template.spec.volumes[?(@.name == "cert")].secret.secretName
+        action: replace
+        value: "{{ .component }}-cert"
