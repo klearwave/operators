@@ -44,3 +44,13 @@ download:
 # overlay changes from upstream
 overlay:
 	@scripts/overlay.sh
+
+#
+# testing helpers
+#
+manifests-apply:
+	@kubectl create ns klearwave-$(CAPABILITY)-system --dry-run=client -o yaml | kubectl apply -f -
+	@kubectl apply -f capabilities/$(CAPABILITY)/.source/$(COMPONENT)/manifests/
+
+manifests-delete:
+	@kubectl delete -f capabilities/$(CAPABILITY)/.source/$(COMPONENT)/manifests/
