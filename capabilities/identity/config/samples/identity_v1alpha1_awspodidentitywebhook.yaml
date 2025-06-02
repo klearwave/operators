@@ -1,0 +1,15 @@
+apiVersion: identity.platform.klearwave.io/v1alpha1
+kind: AWSPodIdentityWebhook
+metadata:
+  name: awspodidentitywebhook-sample
+spec:
+  namespace: "klearwave-identity-system"
+  replicas: 1
+  webhook:
+    image: "amazon/amazon-eks-pod-identity-webhook:v0.6.7"
+    resources:
+      requests:
+        cpu: "25m"
+        memory: "32Mi"
+      limits:
+        memory: "64Mi"

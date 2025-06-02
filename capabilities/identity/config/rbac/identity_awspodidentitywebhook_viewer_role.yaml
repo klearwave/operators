@@ -1,0 +1,23 @@
+# permissions for end users to view awspodidentitywebhooks.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: identity
+    app.kubernetes.io/managed-by: kustomize
+  name: identity-awspodidentitywebhook-viewer-role
+rules:
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks/status
+  verbs:
+  - get

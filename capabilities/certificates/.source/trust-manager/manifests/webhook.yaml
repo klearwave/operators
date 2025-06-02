@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: platform
   annotations:
     # +operator-builder:field:name=namespace,type=string,replace="klearwave-certificates-system"
-    cert-manager.io/inject-ca-from: klearwave-certificates-system/trust-manager-tls
+    cert-manager.io/inject-ca-from: klearwave-certificates-system/trust-manager-cert
 webhooks:
   - name: trust.cert-manager.io
     rules:

@@ -4,9 +4,10 @@ set -e
 
 # DESCRIPTION: performs the overlaying a set of manifests.  this is a simply script for now, but may
 #              grow over time so we will keep logic out of the Makefile
+#
 # INPUTS:
-#   CATEGORY: the category of components, from the parent directory in .source (e.g. certificates, ingress)
-#   PROJECT: the project, within the CATEGORY, to overlay
+#   CAPABILITY: the capability, stored in the parent directory in (e.g. certificates, identity)
+#   COMPONENT:  the project, within the CAPABILITY, to download
 #
 # USAGE:
 #   CATEGORY=secrets PROJECT=external-secrets scripts/overlay.sh
@@ -34,8 +35,8 @@ if [ ! -f ${CAPABILITY_DIR_BASE}/values.yaml ]; then
 fi
 
 # ensure capability values exist
-if [ ! -f ${CAPABILITY_DIR_SOURCE}/values.yaml ]; then
-    echo "missing capability-specific values file at ${CAPABILITY_DIR_SOURCE}/values.yaml..."
+if [ ! -f ${CAPABILITY_DIR}/values.yaml ]; then
+    echo "missing capability-specific values file at ${CAPABILITY_DIR}/values.yaml..."
     exit 1
 fi
 
@@ -63,7 +64,7 @@ for OVERLAY in `ls ${COMPONENT_DIR}/config/overlays`; do \
     # run the stdout through our common overlays
     # yot \
     #    --path=- \
-    #    --instructions=.source/overlay.yaml \
+    #    --instructions=${COMPONENT_DIR}/config/overlay.yaml \
     #    --values-file=${COMPONENT_DIR}/config/values.yaml \
     #    --values-file=${CAPABILITY_DIR}/values.yaml \
     #    --remove-comments \

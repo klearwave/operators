@@ -1,0 +1,18 @@
+kind: StandaloneWorkload
+name: aws-pod-identity-webhook
+spec:
+  api:
+    clusterScoped: true
+    domain: platform.klearwave.io
+    group: identity
+    kind: AWSPodIdentityWebhook
+    version: v1alpha1
+  companionCliRootcmd:
+    name: identityctl
+    description: Manage the identity capability
+  resources:
+    - ../manifests/rbac.yaml
+    - ../manifests/certificates.yaml
+    - ../manifests/deployment.yaml
+    - ../manifests/service.yaml
+    - ../manifests/webhook.yaml

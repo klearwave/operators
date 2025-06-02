@@ -1,4 +1,4 @@
-VERSION ?= latest
+VERSION ?= unstable
 OS ?= darwin
 ARCH ?= amd64
 
@@ -18,18 +18,6 @@ yot:
 #
 # code generation
 #
-WORKLOAD_CONFIG ?= .source/workload-cert-manager.yaml
-define operator_builder_init
-	operator-builder init \
-		--workload-config $(WORKLOAD_CONFIG) \
-		--repo github.com/tbd-paas/capabilities-certificates-operator \
-		--controller-image quay.io/tbd-paas/certificates-operator:$(VERSION) \
-		--skip-go-version-check
-endef
-
-#
-# project management
-#
 CAPABILITY ?=
 COMPONENT ?=
 
@@ -41,9 +29,36 @@ scaffold:
 download:
 	@scripts/download.sh
 
+download-all:
+	for capability in `find capabilities -type d -maxdepth 1 -mindepth 1 -exec basename {} \;`; do \
+		for component in `find capabilities/$$capability/.source -type d -maxdepth 1 -mindepth 1 -exec basename {} \;`; do \
+			CAPABILITY=$$capability COMPONENT=$$component scripts/download.sh; \
+		done; \
+	done
+
 # overlay changes from upstream
 overlay:
 	@scripts/overlay.sh
+
+overlay-all:
+	for capability in `find capabilities -type d -maxdepth 1 -mindepth 1 -exec basename {} \;`; do \
+		for component in `find capabilities/$$capability/.source -type d -maxdepth 1 -mindepth 1 -exec basename {} \;`; do \
+			CAPABILITY=$$capability COMPONENT=$$component scripts/overlay.sh; \
+		done; \
+	done
+
+operator-init:
+	@VERSION=$(VERSION) scripts/operator-init.sh
+
+operator-create:
+	@VERSION=$(VERSION) scripts/operator-create.sh
+
+# preserve manually modified assets
+preserve:
+	@scripts/preserve-assets.sh
+
+restore:
+	@scripts/restore-assets.sh
 
 #
 # testing helpers

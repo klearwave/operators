@@ -60,7 +60,7 @@ commonOverlays:
   - name: "add node selector"
     query: spec.template.spec.nodeSelector
     value:
-      tbd.io/node-type: platform
+      platform.klearwave.io/node-type: platform
 
 yamlFiles:
   - name: "aws-pod-identity-webhook deployment"

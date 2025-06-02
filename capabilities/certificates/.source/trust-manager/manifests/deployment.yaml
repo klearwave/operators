@@ -123,7 +123,7 @@ spec:
         - name: tls
           secret:
             defaultMode: 420
-            secretName: trust-manager-tls
+            secretName: trust-manager-cert
       securityContext:
         fsGroup: 1001
         runAsUser: 1001

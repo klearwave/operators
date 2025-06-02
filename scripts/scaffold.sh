@@ -17,8 +17,13 @@ source "$(dirname "$0")/common.sh"
 #   NOTE: also sets vars needed below
 set_capability_component_vars
 
-# create the component directory
-echo "creating directory structure at ${COMPONENT_DIR}..."
+# create the capability directory structure
+echo "creating capability directory structure at ${CAPABILITY_DIR}..."
+mkdir -p \
+    ${CAPABILITY_DIR}/.assets
+
+# create the component directory structure
+echo "creating component directory structure at ${COMPONENT_DIR}..."
 mkdir -p \
     ${COMPONENT_DIR}/config/overlays \
     ${COMPONENT_DIR}/vendor \
@@ -43,8 +48,26 @@ fi
 
 if [ ! -f ${CAPABILITY_DIR_SOURCE}/values.yaml ]; then
     echo "creating capabilities values file at ${CAPABILITY_DIR_SOURCE}/values.yaml..."
-    cat <<EOF > ${CAPABILITIY_DIR_SOURCE}/values.yaml
+    cat <<EOF > ${CAPABILITY_DIR_SOURCE}/values.yaml
 ---
 capability: ${CAPABILITY}
+EOF
+fi
+
+if [ ! -f ${CAPABILITY_DIR}/.assets/assets ]; then
+    echo "creating assets file at ${CAPABILITY_DIR}/.assets/assets..."
+    cat <<EOF > ${CAPABILITY_DIR}/.assets/assets
+export MANAGED_ASSETS="
+	../go.mod
+	../README.md
+	../.gitignore
+	../.dockerignore
+	../.github/workflows/release.yml
+	../.goreleaser.yml
+	../Dockerfile
+	../LICENSE
+	../config/default/kustomization.yaml
+	../config/default/manager_auth_proxy_patch.yaml
+"
 EOF
 fi

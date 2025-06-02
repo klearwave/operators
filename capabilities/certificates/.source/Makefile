@@ -7,8 +7,8 @@ WORKLOAD_CONFIG ?= .source/workload-cert-manager.yaml
 define operator_builder_init
 	operator-builder init \
 		--workload-config $(WORKLOAD_CONFIG) \
-		--repo github.com/tbd-paas/capabilities-certificates-operator \
-		--controller-image quay.io/tbd-paas/certificates-operator:$(VERSION) \
+		--repo github.com/klearwave/operators-capability/capabilities/certificates \
+		--controller-image ghcr.io/klearwave/certificates-operator:$(VERSION) \
 		--skip-go-version-check
 endef
 
@@ -108,7 +108,7 @@ overlay-all:
 # controller manifests
 # NOTE: we need to preserve the original kustomization file as we always want our generated manifest to 
 #       be set to the latest release except when we tag a new version.
-CONTROLLER_IMG ?= quay.io/tbd-paas/certificates-operator:latest
+CONTROLLER_IMG ?= ghcr.io/klearwave/certificates-operator:latest
 MANIFESTS_FILE ?= ../../config/deploy/manifests.yaml
 controller-manifests:
 	cd .. && \

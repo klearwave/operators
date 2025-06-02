@@ -3,6 +3,7 @@
 set -e
 
 # DESCRIPTION: performs the download of a set of manifests, using vendir, from an upstream
+#
 # INPUTS:
 #   CAPABILITY: the capability, stored in the parent directory in (e.g. certificates, identity)
 #   COMPONENT:  the project, within the CAPABILITY, to download

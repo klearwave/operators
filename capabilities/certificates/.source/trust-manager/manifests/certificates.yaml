@@ -19,7 +19,7 @@ spec:
     - trust-manager.klearwave-certificates-system
     - trust-manager.klearwave-certificates-system.svc
     - trust-manager.klearwave-certificates-system.svc.local
-  secretName: trust-manager-tls
+  secretName: trust-manager-cert
   revisionHistoryLimit: 1
   issuerRef:
     name: internal

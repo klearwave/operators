@@ -3,7 +3,7 @@ name: cert-manager
 spec:
   api:
     clusterScoped: true
-    domain: platform.tbd.io
+    domain: platform.klearwave.io
     group: certificates
     kind: CertManager
     version: v1alpha1
