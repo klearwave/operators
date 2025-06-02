@@ -25,11 +25,21 @@ fi
 source ${CAPABILITY_DIR}/.assets/assets
 
 # preserve the assets
+
+		# DEST=`echo $$ASSET | sed 's/\.\.\///g'`; \
+		# if [ -f $$ASSET ]; then \
+		# 	echo "preserving file $$ASSET"; \
+		# 	DIR=`dirname $$DEST`; \
+		# 	mkdir -p assets/$$DIR; \
+		# 	cp -R $$ASSET assets/$$DEST; \
+
 pushd ${CAPABILITY_DIR}/.assets
 for ASSET in ${MANAGED_ASSETS}; do
-    DEST="./"
+    DEST=`echo $ASSET | sed 's/\.\.\///g'`
     if [ -f $ASSET ]; then
         echo "preserving file: $ASSET"
+        DIR=`dirname $DEST`
+        mkdir -p $DIR
         cp -R $ASSET $DEST
     elif [ -d $ASSET ]; then
         echo "preserving directory: $ASSET"
