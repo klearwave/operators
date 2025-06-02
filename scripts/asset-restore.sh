@@ -19,5 +19,5 @@ set_capability_vars
 
 # restore the assets
 pushd ${CAPABILITY_DIR}/.assets
-cp -R ./* ..
+cp -R . ..
 popd

@@ -1,0 +1,681 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    control-plane: controller-manager
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: klearwave-operators-system
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (unknown)
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: awspodidentitywebhooks.identity.platform.klearwave.io
+spec:
+  group: identity.platform.klearwave.io
+  names:
+    kind: AWSPodIdentityWebhook
+    listKind: AWSPodIdentityWebhookList
+    plural: awspodidentitywebhooks
+    singular: awspodidentitywebhook
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: AWSPodIdentityWebhook is the Schema for the awspodidentitywebhooks
+          API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AWSPodIdentityWebhookSpec defines the desired state of AWSPodIdentityWebhook.
+            properties:
+              namespace:
+                default: klearwave-identity-system
+                description: '(Default: "klearwave-identity-system")'
+                type: string
+              replicas:
+                default: 1
+                description: "(Default: 1)\n\n\n\tNumber of replicas to use for the
+                  AWS pod identity webhook deployment."
+                type: integer
+              webhook:
+                properties:
+                  image:
+                    default: amazon/amazon-eks-pod-identity-webhook:v0.6.7
+                    description: "(Default: \"amazon/amazon-eks-pod-identity-webhook:v0.6.7\")\n\n\n\tImage
+                      to use for AWS pod identity webhook deployment."
+                    type: string
+                  resources:
+                    properties:
+                      limits:
+                        properties:
+                          memory:
+                            default: 64Mi
+                            description: "(Default: \"64Mi\")\n\n\n\tMemory limits
+                              to use for AWS pod identity webhook deployment."
+                            type: string
+                        type: object
+                      requests:
+                        properties:
+                          cpu:
+                            default: 25m
+                            description: "(Default: \"25m\")\n\n\n\tCPU requests to
+                              use for AWS pod identity webhook deployment."
+                            type: string
+                          memory:
+                            default: 32Mi
+                            description: "(Default: \"32Mi\")\n\n\n\tMemory requests
+                              to use for AWS pod identity webhook deployment."
+                            type: string
+                        type: object
+                    type: object
+                type: object
+            type: object
+          status:
+            description: AWSPodIdentityWebhookStatus defines the observed state of
+              AWSPodIdentityWebhook.
+            properties:
+              conditions:
+                items:
+                  description: |-
+                    PhaseCondition describes an event that has occurred during a phase
+                    of the controller reconciliation loop.
+                  properties:
+                    lastModified:
+                      description: LastModified defines the time in which this component
+                        was updated.
+                      type: string
+                    message:
+                      description: Message defines a helpful message from the phase.
+                      type: string
+                    phase:
+                      description: Phase defines the phase in which the condition
+                        was set.
+                      type: string
+                    state:
+                      description: PhaseState defines the current state of the phase.
+                      enum:
+                      - Complete
+                      - Reconciling
+                      - Failed
+                      - Pending
+                      type: string
+                  required:
+                  - lastModified
+                  - message
+                  - phase
+                  - state
+                  type: object
+                type: array
+              created:
+                type: boolean
+              dependenciesSatisfied:
+                type: boolean
+              resources:
+                items:
+                  description: ChildResource is the resource and its condition as
+                    stored on the workload custom resource's status field.
+                  properties:
+                    condition:
+                      description: ResourceCondition defines the current condition
+                        of this resource.
+                      properties:
+                        created:
+                          description: Created defines whether this object has been
+                            successfully created or not.
+                          type: boolean
+                        lastModified:
+                          description: LastModified defines the time in which this
+                            resource was updated.
+                          type: string
+                        message:
+                          description: Message defines a helpful message from the
+                            resource phase.
+                          type: string
+                      required:
+                      - created
+                      type: object
+                    group:
+                      description: Group defines the API Group of the resource.
+                      type: string
+                    kind:
+                      description: Kind defines the kind of the resource.
+                      type: string
+                    name:
+                      description: Name defines the name of the resource from the
+                        metadata.name field.
+                      type: string
+                    namespace:
+                      description: Namespace defines the namespace in which this resource
+                        exists in.
+                      type: string
+                    version:
+                      description: Version defines the API Version of the resource.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - namespace
+                  - version
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-leader-election-role
+  namespace: klearwave-operators-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-identity-awspodidentitywebhook-editor-role
+rules:
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-identity-awspodidentitywebhook-viewer-role
+rules:
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-manager-role
+rules:
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - create
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - identity.platform.klearwave.io
+  resources:
+  - awspodidentitywebhooks/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-leader-election-rolebinding
+  namespace: klearwave-operators-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: identity-operator-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: identity-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: identity-operator-manager-role
+subjects:
+- kind: ServiceAccount
+  name: identity-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: identity-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    control-plane: controller-manager
+    platform.klearwave.io/capability: identity
+    platform.klearwave.io/platform-version: unstable
+  name: identity-operator-controller-manager
+  namespace: klearwave-operators-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: default
+      app.kubernetes.io/name: identity-operator
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/version: unstable
+      control-plane: controller-manager
+      platform.klearwave.io/capability: identity
+      platform.klearwave.io/platform-version: unstable
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/instance: default
+        app.kubernetes.io/name: identity-operator
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/version: unstable
+        control-plane: controller-manager
+        platform.klearwave.io/capability: identity
+        platform.klearwave.io/platform-version: unstable
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: platform.klearwave.io/node-type
+                operator: In
+                values:
+                - platform
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - identity-operator
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            cpu: 5m
+            memory: 16Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        command:
+        - /manager
+        image: ghcr.io/klearwave/identity-operator:latest
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 125m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 16Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      serviceAccountName: identity-operator-controller-manager
+      terminationGracePeriodSeconds: 10
