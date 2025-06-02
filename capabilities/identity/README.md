@@ -24,7 +24,7 @@ To clean up:
 
 First, set the image:
 
-    export IMG=github.com/klearwave/operators-capability/identity-operator:unstable
+    export IMG=quay.io/klearwave/identity-operator:latest
 
 Now you can build and push the image:
 

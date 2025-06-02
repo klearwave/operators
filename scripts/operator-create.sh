@@ -16,7 +16,7 @@ set -e
 source "$(dirname "$0")/common.sh"
 
 # ensure inputs are provided
-set_capability_component_vars
+set_capability_vars
 : ${VERSION?missing environment variable VERSION}
 
 # ensure operator-builder is installed
@@ -25,19 +25,23 @@ if [ -z `which operator-builder` ]; then
     exit 1
 fi
 
-# ensure workload config exists
-WORKLOAD_CONFIG=${COMPONENT_DIR}/config/workload.yaml
-if [ ! -f ${WORKLOAD_CONFIG} ]; then
-    echo "workload configuration file not found at ${WORKLOAD_CONFIG}"
-    echo "please create the workload configuration file first..."
-    exit 1
-fi
+# create the capability operator with all components
+pushd $CAPABILITY_DIR > /dev/null
+for COMPONENT in `find .source -type d -maxdepth 1 -mindepth 1 -exec basename {} \;`; do
+    # ensure workload config exists
+    WORKLOAD_CONFIG=./.source/${COMPONENT}/config/workload.yaml
+    if [ ! -f ${WORKLOAD_CONFIG} ]; then
+        echo "workload configuration file not found at ${WORKLOAD_CONFIG}"
+        echo "please create the workload configuration file first..."
+        exit 1
+    fi
 
-# initialize the operator
-pushd ${CAPABILITY_DIR}
-operator-builder create api \
-    --workload-config .source/${COMPONENT}/config/workload.yaml \
-    --controller \
-    --resource \
-    --force
-popd
+    echo "building component: ${COMPONENT}..."
+
+    operator-builder create api \
+        --workload-config ${WORKLOAD_CONFIG} \
+        --controller \
+        --resource \
+        --force
+done
+popd > /dev/null

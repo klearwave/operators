@@ -11,7 +11,7 @@ plugins:
     cliRootCommandName: identityctl
     controllerImg: ""
     enableOlm: false
-    workloadConfigPath: .source/aws-pod-identity-webhook/config/workload.yaml
+    workloadConfigPath: ./.source/aws-pod-identity-webhook/config/workload.yaml
 projectName: identity
 repo: github.com/klearwave/operators-capability/capabilities/identity
 resources:

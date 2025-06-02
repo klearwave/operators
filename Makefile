@@ -53,12 +53,22 @@ operator-init:
 operator-create:
 	@VERSION=$(VERSION) scripts/operator-create.sh
 
-# preserve manually modified assets
-preserve:
-	@scripts/preserve-assets.sh
+operator-clean: asset-preserve
+	@scripts/operator-clean.sh
 
-restore:
-	@scripts/restore-assets.sh
+operator: download-all overlay-all operator-clean operator-init operator-create asset-restore controller-manifests
+	cd ../ && go mod tidy
+
+# preserve manually modified assets
+asset-preserve:
+	@scripts/asset-preserve.sh
+
+asset-restore:
+	@scripts/asset-restore.sh
+
+# generate controller manifests post-creation of operator
+controller-manifests:
+	@scripts/controller-manifests.sh
 
 #
 # testing helpers
