@@ -35,8 +35,8 @@ if [ ! -f ${CAPABILITY_DIR_BASE}/values.yaml ]; then
 fi
 
 # ensure capability values exist
-if [ ! -f ${CAPABILITY_DIR}/values.yaml ]; then
-    echo "missing capability-specific values file at ${CAPABILITY_DIR}/values.yaml..."
+if [ ! -f ${CAPABILITY_DIR}/.source/values.yaml ]; then
+    echo "missing capability-specific values file at ${CAPABILITY_DIR}/.source/ values.yaml..."
     exit 1
 fi
 

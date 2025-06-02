@@ -27,7 +27,7 @@ make kustomize
 mkdir -p config/deploy
 cd config/manager
 cp -f kustomization.yaml kustomization.yaml.bak
-export KUSTOMIZE_CMD=$$(ls ../../bin/kustomize*)
+export KUSTOMIZE_CMD=$(ls ../../bin/kustomize*)
 ${KUSTOMIZE_CMD} edit set image controller=${CONTROLLER_IMG}
 ${KUSTOMIZE_CMD} build ../../config/default > ../../config/deploy/manifests.yaml
 mv kustomization.yaml.bak kustomization.yaml
