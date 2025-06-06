@@ -1,0 +1,27 @@
+# permissions for end users to edit trustmanagers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: certificates
+    app.kubernetes.io/managed-by: kustomize
+  name: certificates-trustmanager-editor-role
+rules:
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers/status
+  verbs:
+  - get

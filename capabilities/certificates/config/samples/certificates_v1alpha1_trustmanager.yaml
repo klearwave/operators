@@ -1,0 +1,15 @@
+apiVersion: certificates.platform.klearwave.io/v1alpha1
+kind: TrustManager
+metadata:
+  name: trustmanager-sample
+spec:
+  namespace: "klearwave-certificates-system"
+  controller:
+    replicas: 1
+    image: "quay.io/jetstack/trust-manager:v0.17.1"
+    resources:
+      requests:
+        cpu: "25m"
+        memory: "32Mi"
+      limits:
+        memory: "64Mi"

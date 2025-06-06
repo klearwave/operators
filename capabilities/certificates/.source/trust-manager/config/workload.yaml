@@ -11,9 +11,9 @@ spec:
     name: certificatesctl
     description: Manage the certificates capability
   resources:
-    - trust-manager/manifests/crds.yaml
-    - trust-manager/manifests/rbac.yaml
-    - trust-manager/manifests/certificates.yaml
-    - trust-manager/manifests/deployment.yaml
-    - trust-manager/manifests/service.yaml
-    - trust-manager/manifests/webhook.yaml
+    - ../manifests/crds.yaml
+    - ../manifests/rbac.yaml
+    - ../manifests/certificates.yaml
+    - ../manifests/deployment.yaml
+    - ../manifests/service.yaml
+    - ../manifests/webhook.yaml

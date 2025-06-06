@@ -1,0 +1,1320 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    control-plane: controller-manager
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: klearwave-operators-system
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (unknown)
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certmanagers.certificates.platform.klearwave.io
+spec:
+  group: certificates.platform.klearwave.io
+  names:
+    kind: CertManager
+    listKind: CertManagerList
+    plural: certmanagers
+    singular: certmanager
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: CertManager is the Schema for the certmanagers API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: CertManagerSpec defines the desired state of CertManager.
+            properties:
+              aws:
+                properties:
+                  roleARN:
+                    default: ""
+                    description: "(Default: \"\")\n\n\n\tThe AWS IAM Role ARN to use
+                      for validating public DNS records for issuing public certificates."
+                    type: string
+                type: object
+              controller:
+                properties:
+                  image:
+                    default: quay.io/jetstack/cert-manager-controller:v1.17.2
+                    description: "(Default: \"quay.io/jetstack/cert-manager-controller:v1.17.2\")\n\n\n\tImage
+                      to use for cert-manager controller deployment."
+                    type: string
+                  resources:
+                    properties:
+                      limits:
+                        properties:
+                          memory:
+                            default: 64Mi
+                            description: "(Default: \"64Mi\")\n\n\n\tMemory limits
+                              to use for cert-manager controller deployment."
+                            type: string
+                        type: object
+                      requests:
+                        properties:
+                          cpu:
+                            default: 25m
+                            description: "(Default: \"25m\")\n\n\n\tCPU requests to
+                              use for cert-manager controller deployment."
+                            type: string
+                          memory:
+                            default: 32Mi
+                            description: "(Default: \"32Mi\")\n\n\n\tMemory requests
+                              to use for cert-manager controller deployment."
+                            type: string
+                        type: object
+                    type: object
+                type: object
+              injector:
+                properties:
+                  image:
+                    default: quay.io/jetstack/cert-manager-cainjector:v1.17.2
+                    description: "(Default: \"quay.io/jetstack/cert-manager-cainjector:v1.17.2\")\n\n\n\tImage
+                      to use for cert-manager CA injector deployment."
+                    type: string
+                  resources:
+                    properties:
+                      limits:
+                        properties:
+                          memory:
+                            default: 128Mi
+                            description: "(Default: \"128Mi\")\n\n\n\tMemory limits
+                              to use for cert-manager CA injector deployment."
+                            type: string
+                        type: object
+                      requests:
+                        properties:
+                          cpu:
+                            default: 50m
+                            description: "(Default: \"50m\")\n\n\n\tCPU requests to
+                              use for cert-manager CA injector deployment."
+                            type: string
+                          memory:
+                            default: 64Mi
+                            description: "(Default: \"64Mi\")\n\n\n\tMemory requests
+                              to use for cert-manager CA injector deployment."
+                            type: string
+                        type: object
+                    type: object
+                type: object
+              namespace:
+                default: klearwave-certificates-system
+                description: '(Default: "klearwave-certificates-system")'
+                type: string
+              webhook:
+                properties:
+                  image:
+                    default: quay.io/jetstack/cert-manager-webhook:v1.17.2
+                    description: "(Default: \"quay.io/jetstack/cert-manager-webhook:v1.17.2\")\n\n\n\tImage
+                      to use for cert-manager webhook deployment."
+                    type: string
+                  resources:
+                    properties:
+                      limits:
+                        properties:
+                          memory:
+                            default: 64Mi
+                            description: "(Default: \"64Mi\")\n\n\n\tMemory limits
+                              to use for cert-manager webhook deployment."
+                            type: string
+                        type: object
+                      requests:
+                        properties:
+                          cpu:
+                            default: 25m
+                            description: "(Default: \"25m\")\n\n\n\tCPU requests to
+                              use for cert-manager webhook deployment."
+                            type: string
+                          memory:
+                            default: 32Mi
+                            description: "(Default: \"32Mi\")\n\n\n\tMemory requests
+                              to use for cert-manager webhook deployment."
+                            type: string
+                        type: object
+                    type: object
+                type: object
+            type: object
+          status:
+            description: CertManagerStatus defines the observed state of CertManager.
+            properties:
+              conditions:
+                items:
+                  description: |-
+                    PhaseCondition describes an event that has occurred during a phase
+                    of the controller reconciliation loop.
+                  properties:
+                    lastModified:
+                      description: LastModified defines the time in which this component
+                        was updated.
+                      type: string
+                    message:
+                      description: Message defines a helpful message from the phase.
+                      type: string
+                    phase:
+                      description: Phase defines the phase in which the condition
+                        was set.
+                      type: string
+                    state:
+                      description: PhaseState defines the current state of the phase.
+                      enum:
+                      - Complete
+                      - Reconciling
+                      - Failed
+                      - Pending
+                      type: string
+                  required:
+                  - lastModified
+                  - message
+                  - phase
+                  - state
+                  type: object
+                type: array
+              created:
+                type: boolean
+              dependenciesSatisfied:
+                type: boolean
+              resources:
+                items:
+                  description: ChildResource is the resource and its condition as
+                    stored on the workload custom resource's status field.
+                  properties:
+                    condition:
+                      description: ResourceCondition defines the current condition
+                        of this resource.
+                      properties:
+                        created:
+                          description: Created defines whether this object has been
+                            successfully created or not.
+                          type: boolean
+                        lastModified:
+                          description: LastModified defines the time in which this
+                            resource was updated.
+                          type: string
+                        message:
+                          description: Message defines a helpful message from the
+                            resource phase.
+                          type: string
+                      required:
+                      - created
+                      type: object
+                    group:
+                      description: Group defines the API Group of the resource.
+                      type: string
+                    kind:
+                      description: Kind defines the kind of the resource.
+                      type: string
+                    name:
+                      description: Name defines the name of the resource from the
+                        metadata.name field.
+                      type: string
+                    namespace:
+                      description: Namespace defines the namespace in which this resource
+                        exists in.
+                      type: string
+                    version:
+                      description: Version defines the API Version of the resource.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - namespace
+                  - version
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: (unknown)
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: trustmanagers.certificates.platform.klearwave.io
+spec:
+  group: certificates.platform.klearwave.io
+  names:
+    kind: TrustManager
+    listKind: TrustManagerList
+    plural: trustmanagers
+    singular: trustmanager
+  scope: Cluster
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: TrustManager is the Schema for the trustmanagers API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: TrustManagerSpec defines the desired state of TrustManager.
+            properties:
+              controller:
+                properties:
+                  image:
+                    default: quay.io/jetstack/trust-manager:v0.17.1
+                    description: "(Default: \"quay.io/jetstack/trust-manager:v0.17.1\")\n\n\n\tImage
+                      to use for trust-manager controller deployment."
+                    type: string
+                  replicas:
+                    default: 1
+                    description: "(Default: 1)\n\n\n\tNumber of replicas to use for
+                      the trust-manager controller deployment."
+                    type: integer
+                  resources:
+                    properties:
+                      limits:
+                        properties:
+                          memory:
+                            default: 64Mi
+                            description: "(Default: \"64Mi\")\n\n\n\tMemory limits
+                              to use for trust-manager controller deployment."
+                            type: string
+                        type: object
+                      requests:
+                        properties:
+                          cpu:
+                            default: 25m
+                            description: "(Default: \"25m\")\n\n\n\tCPU requests to
+                              use for trust-manager controller deployment."
+                            type: string
+                          memory:
+                            default: 32Mi
+                            description: "(Default: \"32Mi\")\n\n\n\tMemory requests
+                              to use for trust-manager controller deployment."
+                            type: string
+                        type: object
+                    type: object
+                type: object
+              namespace:
+                default: klearwave-certificates-system
+                description: '(Default: "klearwave-certificates-system")'
+                type: string
+            type: object
+          status:
+            description: TrustManagerStatus defines the observed state of TrustManager.
+            properties:
+              conditions:
+                items:
+                  description: |-
+                    PhaseCondition describes an event that has occurred during a phase
+                    of the controller reconciliation loop.
+                  properties:
+                    lastModified:
+                      description: LastModified defines the time in which this component
+                        was updated.
+                      type: string
+                    message:
+                      description: Message defines a helpful message from the phase.
+                      type: string
+                    phase:
+                      description: Phase defines the phase in which the condition
+                        was set.
+                      type: string
+                    state:
+                      description: PhaseState defines the current state of the phase.
+                      enum:
+                      - Complete
+                      - Reconciling
+                      - Failed
+                      - Pending
+                      type: string
+                  required:
+                  - lastModified
+                  - message
+                  - phase
+                  - state
+                  type: object
+                type: array
+              created:
+                type: boolean
+              dependenciesSatisfied:
+                type: boolean
+              resources:
+                items:
+                  description: ChildResource is the resource and its condition as
+                    stored on the workload custom resource's status field.
+                  properties:
+                    condition:
+                      description: ResourceCondition defines the current condition
+                        of this resource.
+                      properties:
+                        created:
+                          description: Created defines whether this object has been
+                            successfully created or not.
+                          type: boolean
+                        lastModified:
+                          description: LastModified defines the time in which this
+                            resource was updated.
+                          type: string
+                        message:
+                          description: Message defines a helpful message from the
+                            resource phase.
+                          type: string
+                      required:
+                      - created
+                      type: object
+                    group:
+                      description: Group defines the API Group of the resource.
+                      type: string
+                    kind:
+                      description: Kind defines the kind of the resource.
+                      type: string
+                    name:
+                      description: Name defines the name of the resource from the
+                        metadata.name field.
+                      type: string
+                    namespace:
+                      description: Namespace defines the namespace in which this resource
+                        exists in.
+                      type: string
+                    version:
+                      description: Version defines the API Version of the resource.
+                      type: string
+                  required:
+                  - group
+                  - kind
+                  - name
+                  - namespace
+                  - version
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-leader-election-role
+  namespace: klearwave-operators-system
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-certificates-certmanager-editor-role
+rules:
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-certificates-certmanager-viewer-role
+rules:
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-certificates-trustmanager-editor-role
+rules:
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-certificates-trustmanager-viewer-role
+rules:
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers/status
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-manager-role
+rules:
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - challenges
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - challenges/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - challenges/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - orders
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - orders/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - acme.cert-manager.io
+  resources:
+  - orders/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apiregistration.k8s.io
+  resources:
+  - apiservices
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificaterequests
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificaterequests/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificaterequests/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - clusterissuers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - clusterissuers/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - issuers
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - issuers/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - signers
+  verbs:
+  - approve
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests
+  verbs:
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - certificatesigningrequests/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - certificates.k8s.io
+  resources:
+  - signers
+  verbs:
+  - sign
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - certmanagers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - certificates.platform.klearwave.io
+  resources:
+  - trustmanagers/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - get
+  - patch
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - serviceaccounts/token
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - gateways
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - gateways/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - httproutes
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - httproutes/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterrolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - roles
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - route.openshift.io
+  resources:
+  - routes/custom-host
+  verbs:
+  - create
+- apiGroups:
+  - trust.cert-manager.io
+  resources:
+  - bundles
+  verbs:
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - trust.cert-manager.io
+  resources:
+  - bundles/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - trust.cert-manager.io
+  resources:
+  - bundles/status
+  verbs:
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-leader-election-rolebinding
+  namespace: klearwave-operators-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: certificates-operator-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: certificates-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: certificates-operator-manager-role
+subjects:
+- kind: ServiceAccount
+  name: certificates-operator-controller-manager
+  namespace: klearwave-operators-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: default
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: certificates-operator
+    app.kubernetes.io/part-of: platform
+    app.kubernetes.io/version: unstable
+    control-plane: controller-manager
+    platform.klearwave.io/capability: certificates
+    platform.klearwave.io/platform-version: unstable
+  name: certificates-operator-controller-manager
+  namespace: klearwave-operators-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: default
+      app.kubernetes.io/name: certificates-operator
+      app.kubernetes.io/part-of: platform
+      app.kubernetes.io/version: unstable
+      control-plane: controller-manager
+      platform.klearwave.io/capability: certificates
+      platform.klearwave.io/platform-version: unstable
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/default-container: manager
+      labels:
+        app.kubernetes.io/component: controller
+        app.kubernetes.io/instance: default
+        app.kubernetes.io/name: certificates-operator
+        app.kubernetes.io/part-of: platform
+        app.kubernetes.io/version: unstable
+        control-plane: controller-manager
+        platform.klearwave.io/capability: certificates
+        platform.klearwave.io/platform-version: unstable
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - arm64
+              - key: kubernetes.io/os
+                operator: In
+                values:
+                - linux
+              - key: platform.klearwave.io/node-type
+                operator: In
+                values:
+                - platform
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - certificates-operator
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      containers:
+      - args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        image: gcr.io/kubebuilder/kube-rbac-proxy:v0.13.1
+        name: kube-rbac-proxy
+        ports:
+        - containerPort: 8443
+          name: https
+          protocol: TCP
+        resources:
+          limits:
+            memory: 64Mi
+          requests:
+            cpu: 5m
+            memory: 16Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      - args:
+        - --health-probe-bind-address=:8081
+        - --metrics-bind-address=127.0.0.1:8080
+        - --leader-elect
+        command:
+        - /manager
+        image: ghcr.io/klearwave/certificates-operator:latest
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 125m
+            memory: 64Mi
+          requests:
+            cpu: 10m
+            memory: 16Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      securityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      serviceAccountName: certificates-operator-controller-manager
+      terminationGracePeriodSeconds: 10

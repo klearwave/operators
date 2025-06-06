@@ -1,0 +1,17 @@
+export MANAGED_ASSETS="
+	../go.mod
+	../README.md
+	../.gitignore
+	../.dockerignore
+	../.github/workflows/release.yml
+	../.goreleaser.yml
+	../Dockerfile
+	../LICENSE
+	../config/default/kustomization.yaml
+	../config/default/manager_auth_proxy_patch.yaml
+	../controllers/certificates/certmanager_phases.go
+	../controllers/certificates/trustmanager_phases.go
+	../apis/certificates/v1alpha1/certmanager/mutate/mutating_webhook_cert_manager_webhook.go
+	../apis/certificates/v1alpha1/certmanager/mutate/validating_webhook_cert_manager_webhook.go
+	../apis/certificates/v1alpha1/trustmanager/mutate/validating_webhook_trust_manager.go
+"
